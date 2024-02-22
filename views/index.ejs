@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Image Processing App</title>
+    </head>
+
+    <body>
+        <h1>Image Processing App</h1>
+
+        <!-- Input Form -->
+        <form id="imageForm">
+            <label for="imageInput">Choose an image:</label>
+            <input type="file" id="imageInput" accept="image/*">
+            <button type="button" onclick="submitForm()">Submit</button>
+        </form>
+
+        <!-- Result Display -->
+        <div id="resultContainer" style="display:none;">
+            <h2>Result</h2>
+            <p id="resultMessage"></p>
+            <!-- Display other result information here -->
+        </div>
+
+        <script>
+            async function submitForm() {
+                const fileInput = document.getElementById('imageInput');
+                const file = fileInput.files[0];
+
+                if (file) {
+                    // Use fetch or other methods to send the file to the server for processing
+                    const formData = new FormData();
+                    formData.append('image', file);
+
+                    const response = await fetch('/predict', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const resultData = await response.json();
+
+                        // Update the result display
+                        document.getElementById('resultMessage').innerText = resultData.message;
+                        document.getElementById('resultContainer').style.display = 'block';
+                    } else {
+                        console.error('Failed to process image');
+                    }
+                }
+            }
+        </script>
+    </body>
+
+</html>
