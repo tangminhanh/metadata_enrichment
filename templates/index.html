@@ -8,24 +8,27 @@
 </head>
 <body>
     <h1>Get Metadata</h1>
-    <form action = "/index" method="post" style="display: flex; flex-direction: column; ">
-        <input type="text" name="url" id="url" style="width: 300px;"
-        placeholder="Enter image/video url"/>
-        <div>
-            <input type="radio" id="select" name="select" value="image" checked="checked">
-            <label for="image">Image</label><br>
-        </div>
-        <div>
-            <input type="radio" id="select" name="select" value="video">
-            <label for="video">Video</label><br>
-        </div>
-
-        <button type="submit" style="width: 100px;">Submit</button>
-    </form>
 
     {{ display|safe }}
     
     <p>data: {{ data }}</p>
-    <o>value : {{test}}</o>
+    <p style="padding-bottom: 20px;">url : {{test}}</p>
+
+    <form action = "/index" method="post" style="display: flex; flex-direction: column; ">
+        <input type="text" name="url" id="url" style="width: 300px;"
+        placeholder="Enter image/video url"/>
+        <div style="display: flex; flex-direction: row; margin-bottom: 10px;">
+            <div>
+                <input type="radio" id="select" name="select" value="image" checked="checked">
+                <label for="image">Image</label><br>
+            </div>
+            <div>
+                <input type="radio" id="select" name="select" value="video">
+                <label for="video">Video</label><br>
+            </div>
+        </div>
+        <button type="submit" style="width: 100px;">Submit</button>
+    </form>
+
 </body>
 </html>
