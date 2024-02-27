@@ -4,7 +4,7 @@ from flask import Flask, render_template, request
 from transformers import DetrImageProcessor, DetrForObjectDetection
 from PIL import Image
 
-from test import get_metadata
+from test import get_metadata, get_metadata_vid
 
 app = Flask(__name__)
 
@@ -14,16 +14,19 @@ def index():
 
 @app.route('/index', methods = ['POST'])
 def get_image():
-    test = request.form.get('img')
-
-    # if not bool(url.strip()):
-    # url="http://images.cocodataset.org/val2017/000000039769.jpg"
+    url = request.form.get('url')
+    select = request.form.get('select')
     
-    data = get_metadata(test)
+    print(select)
+    if select =='image':
+        data = get_metadata(url, False)
+        display = f'<img src="{url}">'
+    else:
+        data = get_metadata_vid(url)
+        display = f'<video width="320" height="240" controls> <source src="{url}" type="video/mp4"></video>'
 
     return render_template("index.html",
-                           title = "test",
                            data = data,
-                           image = test,
-                           test = test,
+                           display = display,
+                           test = url,
                            )
