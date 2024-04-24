@@ -11,13 +11,7 @@ import requests
 ## TEST VIDEO LINKS
 # https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4
 
-def get_metadata(url, loc):
-    
-    if loc:
-        image = Image.open(url)
-    else:
-        image = Image.open(requests.get(url, stream=True).raw)
-
+def get_metadata(image):
     # you can specify the revision tag if you don't want the timm dependency
     processor = DetrImageProcessor.from_pretrained("facebook/detr-resnet-50", revision="no_timm")
     model = DetrForObjectDetection.from_pretrained("facebook/detr-resnet-50", revision="no_timm")
@@ -38,8 +32,6 @@ def get_metadata(url, loc):
 
     print("Data:")
     print(reslist)
-    # print("\nConfidence:")
-    # print(conflist)
 
     return reslist
 
@@ -48,25 +40,21 @@ def get_metadata_vid(url):
     success,frame = vidcap.read()
     count = 0
 
-    # total number of frames
-    amount_of_frames = vidcap.get(cv2.CAP_PROP_FRAME_COUNT)
-    print(amount_of_frames)
     
     add = 0
     reslist = []
 
     while success:
         if count>3:  # temporary limiter
-            print('bruh')
             break
         
-        cv2.imwrite("frame.jpg", frame)     # save frame as JPEG file      
-        success,frame = vidcap.read()
-        print('Read a new frame: ', success)
-        
-        ## OBJECT DETECTION MODEL 
-        url = 'frame.jpg'
-        ret = get_metadata(url, True)
+        # cv2.imwrite("frame.jpg", frame)     # save frame as JPEG file      
+        # success,frame = vidcap.read()
+        # url = 'frame.jpg'
+        img = Image.fromarray(frame[:, :, ::-1])
+
+        ## OBJECT DETECTION MODEL
+        ret = get_metadata(img)
   
         for val in ret:
             if val not in reslist: 
@@ -79,3 +67,5 @@ def get_metadata_vid(url):
     
     vidcap.release()
     return reslist
+
+get_metadata_vid('https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4')
