@@ -2,7 +2,7 @@ import cv2
 from transformers import DetrImageProcessor, DetrForObjectDetection
 import torch
 from PIL import Image
-import requests
+# import matplotlib.pyplot as plt
 
 ## TEST IMAGE LINKS
 # http://images.cocodataset.org/val2017/000000039769.jpg
@@ -45,13 +45,17 @@ def get_metadata_vid(url):
     reslist = []
 
     while success:
-        if count>3:  # temporary limiter
+        if count>10:  # temporary limiter
             break
-        
-        # cv2.imwrite("frame.jpg", frame)     # save frame as JPEG file      
-        # success,frame = vidcap.read()
-        # url = 'frame.jpg'
+            
+        success,frame = vidcap.read()
         img = Image.fromarray(frame[:, :, ::-1])
+
+        ## if u wanna see the image
+        # plt.imshow(img)
+        # plt.title(f"Frame {count}")
+        # plt.axis('off')  # Hide axes
+        # plt.show()
 
         ## OBJECT DETECTION MODEL
         ret = get_metadata(img)
@@ -68,4 +72,4 @@ def get_metadata_vid(url):
     vidcap.release()
     return reslist
 
-get_metadata_vid('https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4')
+get_metadata_vid('http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4')
