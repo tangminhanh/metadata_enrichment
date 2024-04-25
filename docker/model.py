@@ -13,9 +13,9 @@ def get_metadata(image):
 
     # you can specify the revision tag if you don't want the timm dependency
     processor = DetrImageProcessor.from_pretrained(
-        "facebook/detr-resnet-50", revision="no_timm")
+        "facebook/detr-resnet-50", revision="no_timm", cache_dir="/tmp/")
     model = DetrForObjectDetection.from_pretrained(
-        "facebook/detr-resnet-50", revision="no_timm")
+        "facebook/detr-resnet-50", revision="no_timm", cache_dir="/tmp/")
     inputs = processor(images=image, return_tensors="pt")
     outputs = model(**inputs)
     # convert outputs (bounding boxes and class logits) to COCO API
@@ -44,7 +44,7 @@ def lambda_handler(event, context):
     reslist = []
 
     while success:
-        if count > 5:  # temporary limiter
+        if count > 3:  # temporary limiter
             break
 
         success,frame = vidcap.read()
