@@ -1,5 +1,5 @@
 # PythonLambdaDockerECR
-run lambda on docker container and deploy Base image on ECR and use on Lambda 
+to run lambda on docker container and deploy Base image on ECR and use on Lambda 
 
 
 #### Commands to test locally
